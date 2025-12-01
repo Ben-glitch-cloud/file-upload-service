@@ -1,15 +1,10 @@
 package com.fdm.fileUploadService.controller
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fdm.fileUploadService.service.FileManager
-import io.mockk.every
-import io.mockk.impl.annotations.SpyK
-import io.mockk.mockk
-import io.mockk.spyk
-import org.junit.jupiter.api.BeforeEach
+import com.fdm.fileUploadService.modle.File
+import com.fdm.fileUploadService.service.FileManagerService
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mock
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -19,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import kotlin.test.Test
 
 @WebMvcTest(FileManagerController::class)
@@ -31,22 +25,20 @@ class FileManagerControllerTest(
     private lateinit var mvc: MockMvc
 
     @MockitoBean
-    var fileManager = FileManager(filePath)
-
-    private var controller = FileManagerController(fileManager)
-
-    @BeforeEach
-    fun setup(){
-        mvc = MockMvcBuilders.standaloneSetup(controller).build()
-    }
+    private lateinit var fileManagerService: FileManagerService
 
     @Test
-    fun `GET Request - successfully return all files when called`(){
-        val expectedResult = arrayOf("helloWorld.txt", "shoppingList.txt", "learningOutcome.txt") as Array<*>
+    fun `GET Request - Successfully return all files when called`(){
+        val expectedResult = arrayOf<File>(
+            File(1L, "Hello World")
+        )
+
+        `when`(fileManagerService.getAllFiles()).thenReturn(expectedResult)
 
         mvc.perform(get("/files"))
             .andExpect(status().isOk)
             .andExpect(content()
                 .string(jacksonObjectMapper().writeValueAsString(expectedResult)))
     }
+
 }

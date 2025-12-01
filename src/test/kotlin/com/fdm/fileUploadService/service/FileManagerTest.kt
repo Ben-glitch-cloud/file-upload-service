@@ -15,11 +15,11 @@ import kotlin.test.assertEquals
 class FileManagerTest {
 
     @Autowired
-    lateinit var fileManager: FileManager
+    lateinit var fileManagerService: FileManagerService
 
     @Test
     fun `get all files from test storage`(){
-        var result = fileManager.getAllFiles()
+        var result = fileManagerService.getAllFiles()
 
         assertEquals(3, result.count())
     }
