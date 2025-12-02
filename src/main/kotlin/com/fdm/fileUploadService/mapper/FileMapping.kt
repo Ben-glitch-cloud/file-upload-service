@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class FileMapping {
 
     fun convertUserFileToFile(userFile: FileDTO) : File {
-        val convertedFile = File(name = userFile.name)
+        val convertedFile = File(id = null, data = userFile.data)
         return convertedFile
     }
 

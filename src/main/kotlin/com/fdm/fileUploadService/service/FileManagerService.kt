@@ -24,4 +24,8 @@ class FileManagerService(
         repository.save(convertedFile)
     }
 
+    fun deleteAllFiles(){
+        repository.deleteAll()
+
+    }
 }

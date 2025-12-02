@@ -7,4 +7,6 @@ interface FileRepository : Repository<File, Long> {
     fun save(file: File)
 
     fun findAll() : Array<File>
+
+    fun deleteAll()
 }

@@ -10,9 +10,12 @@ class PopulateFileDataBaseCongif{
 
     @Bean
     fun saveFiles(repository: FileRepository) : String{
-        var fileOne = File(null, "helloworld.txt")
-        var fileTwo = File( null, "learningOutcome.txt")
-        var fileThree = File(null, "shoppingList.txt")
+
+        val data = ByteArray(1 * 8 * 8)
+
+        var fileOne = File(null, data)
+        var fileTwo = File( null, data)
+        var fileThree = File(null, data)
 
         repository.save(fileOne)
         repository.save(fileTwo)

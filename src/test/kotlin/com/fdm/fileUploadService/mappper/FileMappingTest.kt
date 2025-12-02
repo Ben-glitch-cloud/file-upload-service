@@ -2,9 +2,9 @@ package com.fdm.fileUploadService.mappper
 
 import com.fdm.fileUploadService.mapper.FileMapping
 import com.fdm.fileUploadService.modle.FileDTO
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.mock.web.MockMultipartFile
+import org.springframework.web.multipart.MultipartFile
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 class FileMappingTest {
@@ -13,11 +13,19 @@ class FileMappingTest {
 
     @Test
     fun `map user file to file storage`(){
-        val userFile = FileDTO("testFile.txt")
+        val data = ByteArray(1 * 8 * 8)
+        val multipartFileOne: MultipartFile = MockMultipartFile(
+            "file",
+            "testFileOne.txt",
+            "text/plain",
+            data
+        )
 
+        val fileToBytes = multipartFileOne.bytes
+        val userFile = FileDTO(fileToBytes)
         val result = fileMapping.convertUserFileToFile(userFile)
 
-        assertEquals("testFile.txt", result.name)
+        // assert type
         assertNull(result.id)
     }
 

@@ -10,15 +10,15 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
-import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import kotlin.test.Test
-import kotlinx.serialization.json.Json
+import org.springframework.mock.web.MockMultipartFile
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart
+import org.springframework.web.multipart.MultipartFile
 
 @WebMvcTest(FileManagerController::class)
 @ExtendWith(MockitoExtension::class)
@@ -33,8 +33,17 @@ class FileManagerControllerTest(
 
     @Test
     fun `GET Request - Successfully return all files when called`(){
+        val data = ByteArray(1 * 1024 * 1024)
+        val multipartFileOne: MultipartFile = MockMultipartFile(
+            "file",
+            "testFileOne.txt",
+            "text/plain",
+            data
+        )
+        val fileOneDtoBytes = multipartFileOne.bytes
+
         val expectedResult = arrayOf<File>(
-            File(null, "testFile.txt")
+            File(null, fileOneDtoBytes)
         )
 
         `when`(fileManagerService.getAllFiles()).thenReturn(expectedResult)
@@ -47,11 +56,16 @@ class FileManagerControllerTest(
 
     @Test
     fun `POST Request - Successfully save valid file`(){
-        val jsonUserFile = Json.encodeToString(FileDTO("testFile.txt"))
+        val data = ByteArray(1 * 8 * 8)
+        val multipartFileOne = MockMultipartFile(
+            "file",
+            "testFileOne.txt",
+            "text/plain",
+            data
+        )
 
-        mvc.perform(post("/file/save")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonUserFile)
+        mvc.perform(multipart("/file/save")
+            .file(multipartFileOne)
         ).andExpect(status().isOk)
     }
 
