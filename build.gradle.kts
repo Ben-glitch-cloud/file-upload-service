@@ -4,6 +4,7 @@ plugins {
     kotlin("plugin.serialization") version "2.2.21"
 	id("org.springframework.boot") version "4.0.0"
 	id("io.spring.dependency-management") version "1.1.7"
+    id("jacoco")
 }
 
 group = "com.fdm"
@@ -47,4 +48,12 @@ kotlin {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // tests are required to run before generating the report
 }
