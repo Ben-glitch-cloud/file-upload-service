@@ -13,6 +13,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import kotlin.test.Test
@@ -66,6 +67,15 @@ class FileManagerControllerTest(
 
         mvc.perform(multipart("/file/save")
             .file(multipartFileOne)
+        ).andExpect(status().isOk)
+    }
+
+    @Test
+    fun `Delete Request - Successfully delete file by identifier`(){
+        val fileIdentifier = 1L
+
+        mvc.perform(
+            delete("/file/delete?id=${fileIdentifier}")
         ).andExpect(status().isOk)
     }
 

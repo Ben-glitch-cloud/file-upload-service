@@ -8,5 +8,7 @@ interface FileRepository : Repository<File, Long> {
 
     fun findAll() : Array<File>
 
+    fun deleteById(id: Long)
+
     fun deleteAll()
 }

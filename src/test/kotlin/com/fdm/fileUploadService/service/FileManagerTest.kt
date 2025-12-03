@@ -4,12 +4,14 @@ package com.fdm.fileUploadService.service
 
 import com.fdm.fileUploadService.Repository.FileRepository
 import com.fdm.fileUploadService.mapper.FileMapping
+import com.fdm.fileUploadService.modle.File
 import com.fdm.fileUploadService.modle.FileDTO
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.PropertySource
+import org.springframework.core.env.Environment
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.web.multipart.MultipartFile
@@ -30,32 +32,21 @@ class FileManagerTest {
     @Autowired
      var fileManagerService = FileManagerService(fileMapper)
 
-   @BeforeEach
-   fun setup(){
-//       val data = ByteArray(1 * 1024 * 1024)
-//       val multipartFileOne: MultipartFile = MockMultipartFile(
-//            "file",
-//            "testFileOne.txt",
-//            "text/plain",
-//            data
-//        )
-//       val multipartFileTwo: MultipartFile = MockMultipartFile(
-//           "file",
-//           "testFileTwo.txt",
-//           "text/plain",
-//           data
-//       )
-//       val multipartFileThree: MultipartFile = MockMultipartFile(
-//           "file",
-//           "testFileThree.txt",
-//           "text/plain",
-//           data
-//       )
-//
-//       fileManagerService.saveFile(FileDTO(multipartFileOne.bytes))
-//       fileManagerService.saveFile(FileDTO(multipartFileTwo.bytes))
-//       fileManagerService.saveFile(FileDTO(multipartFileThree.bytes))
-   }
+    @Autowired
+    lateinit var env: Environment
+
+    @BeforeEach
+    fun setUp(){
+        val data = ByteArray(1 * 8 * 8)
+
+        var fileOne = File(null, data)
+        var fileTwo = File(null, data)
+        var fileThree = File(null, data)
+
+        repository.save(fileOne)
+        repository.save(fileTwo)
+        repository.save(fileThree)
+    }
 
     @Test
     fun `get all files from test storage`(){
@@ -82,13 +73,18 @@ class FileManagerTest {
         assertEquals(result.size, 4)
     }
 
-    @AfterEach
-    fun tearDown(){
-//        fileManagerService.deleteAllFiles()
-//        println("All Files Deleted")
-//        val result = fileManagerService.getAllFiles()
-//
-//        println(result)
+    @Test
+    fun `delete file with ID`(){
+        fileManagerService.deleteFile(1L)
+
+        val result = fileManagerService.getAllFiles()
+        assertEquals(result.size, 2)
     }
+
+    @AfterEach
+    fun teardown(){
+        repository.deleteAll()
+    }
+
 }
 
