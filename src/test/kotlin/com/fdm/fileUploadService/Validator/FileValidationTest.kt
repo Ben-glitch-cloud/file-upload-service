@@ -1,6 +1,6 @@
 package com.fdm.fileUploadService.Validator
 
-import com.fdm.fileUploadService.modle.FileDTO
+import com.fdm.fileUploadService.modle.FileUpload
 import com.fdm.fileUploadService.validator.FileValidation
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -25,7 +25,7 @@ class FileValidationTest {
         val invalidFileSize = invalidMultipartFile.bytes
 
         assertThrows<Exception>{
-            fileValidation.maximumSize(FileDTO(invalidFileSize))
+            fileValidation.storageAmount(FileUpload(invalidFileSize))
         }
     }
 
@@ -41,12 +41,31 @@ class FileValidationTest {
 
         val validFileSize = validMultipartFile.bytes
 
-        assertDoesNotThrow { fileValidation.maximumSize(FileDTO(validFileSize)) }
+        assertDoesNotThrow { fileValidation.storageAmount(FileUpload(validFileSize)) }
     }
 
     @Test
-    fun `When file is null then dont through an exception`(){
-        assertDoesNotThrow { fileValidation.maximumSize(FileDTO(null)) }
+    fun `When file is null then through an exception`(){
+        assertThrows<Exception>{
+            fileValidation.storageAmount(FileUpload(null))
+        }
+    }
+
+    @Test
+    fun `When file size is zero then through exception`(){
+        val data = ByteArray(0 * 0 * 0)
+        val invalidMultipartFile: MultipartFile = MockMultipartFile(
+            "file",
+            "testFileFour.txt",
+            "text/plain",
+            data
+        )
+
+        val invalidFileSize = invalidMultipartFile.bytes
+
+        assertThrows<Exception>{
+            fileValidation.storageAmount(FileUpload(invalidFileSize))
+        }
     }
 
 }

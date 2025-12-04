@@ -5,7 +5,7 @@ package com.fdm.fileUploadService.service
 import com.fdm.fileUploadService.Repository.FileRepository
 import com.fdm.fileUploadService.mapper.FileMapping
 import com.fdm.fileUploadService.modle.File
-import com.fdm.fileUploadService.modle.FileDTO
+import com.fdm.fileUploadService.modle.FileUpload
 import com.fdm.fileUploadService.validator.FileValidation
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -68,7 +68,7 @@ class FileManagerTest {
             data
         )
 
-        val userFile = FileDTO(multipartFileOne.bytes)
+        val userFile = FileUpload(multipartFileOne.bytes)
 
         fileManagerService.saveFile(userFile)
 
@@ -86,7 +86,7 @@ class FileManagerTest {
             data
         )
 
-        val userFile = FileDTO(multipartFileOne.bytes)
+        val userFile = FileUpload(multipartFileOne.bytes)
 
         assertThrows<Exception> {
             fileManagerService.saveFile(userFile)

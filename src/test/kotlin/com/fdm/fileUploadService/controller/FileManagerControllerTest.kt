@@ -2,7 +2,8 @@ package com.fdm.fileUploadService.controller
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fdm.fileUploadService.modle.File
-import com.fdm.fileUploadService.modle.FileDTO
+import com.fdm.fileUploadService.modle.FileUpload
+import com.fdm.fileUploadService.modle.ResponseException
 import com.fdm.fileUploadService.service.FileManagerService
 import io.mockk.mockk
 import org.junit.jupiter.api.extension.ExtendWith
@@ -11,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
+import org.springframework.http.HttpStatus
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
@@ -81,7 +83,12 @@ class FileManagerControllerTest(
             data
         )
 
-        `when`(fileManagerService.saveFile(FileDTO(invalidFileSize.bytes)))
+        var response = ResponseException(
+            errorMessage = "Invalid File - size limited reached must be small or equal than 2MB",
+            HttpStatus.BAD_REQUEST.name
+        )
+
+        `when`(fileManagerService.saveFile(FileUpload(invalidFileSize.bytes)))
             .thenThrow(Exception(
                 "Invalid File - size limited reached must be small or equal than 2MB"
             ))
@@ -89,6 +96,10 @@ class FileManagerControllerTest(
         mvc.perform(multipart("/file/save")
             .file(invalidFileSize)
         ).andExpect(status().isBadRequest)
+            .andExpect(
+                content().string(jacksonObjectMapper().writeValueAsString(response)
+                )
+            )
     }
 
     @Test

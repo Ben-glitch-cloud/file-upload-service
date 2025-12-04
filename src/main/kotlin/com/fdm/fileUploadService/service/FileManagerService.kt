@@ -3,7 +3,7 @@ package com.fdm.fileUploadService.service
 import com.fdm.fileUploadService.Repository.FileRepository
 import com.fdm.fileUploadService.mapper.FileMapping
 import com.fdm.fileUploadService.modle.File
-import com.fdm.fileUploadService.modle.FileDTO
+import com.fdm.fileUploadService.modle.FileUpload
 import com.fdm.fileUploadService.validator.FileValidation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -22,11 +22,10 @@ class FileManagerService(
     }
 
     @Throws(Exception::class)
-    fun saveFile(userFile: FileDTO) {
+    fun saveFile(userFile: FileUpload) {
         try{
-            fileValidation.maximumSize(userFile)
+            fileValidation.storageAmount(userFile)
         } catch (ex: Exception){
-            println("Error : $ex")
             throw ex
         }
         val convertedFile = fileMapper.convertUserFileToFile(userFile)

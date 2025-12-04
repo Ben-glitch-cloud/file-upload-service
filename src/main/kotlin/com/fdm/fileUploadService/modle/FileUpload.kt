@@ -3,6 +3,6 @@ package com.fdm.fileUploadService.modle
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FileDTO(
+data class FileUpload(
     var data: ByteArray? = null
 )

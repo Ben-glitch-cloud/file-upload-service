@@ -1,7 +1,7 @@
 package com.fdm.fileUploadService.mappper
 
 import com.fdm.fileUploadService.mapper.FileMapping
-import com.fdm.fileUploadService.modle.FileDTO
+import com.fdm.fileUploadService.modle.FileUpload
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
 import kotlin.test.Test
@@ -22,7 +22,7 @@ class FileMappingTest {
         )
 
         val fileToBytes = multipartFileOne.bytes
-        val userFile = FileDTO(fileToBytes)
+        val userFile = FileUpload(fileToBytes)
         val result = fileMapping.convertUserFileToFile(userFile)
 
         // assert type
