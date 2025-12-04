@@ -4,12 +4,14 @@ import com.fdm.fileUploadService.Repository.FileRepository
 import com.fdm.fileUploadService.mapper.FileMapping
 import com.fdm.fileUploadService.modle.File
 import com.fdm.fileUploadService.modle.FileDTO
+import com.fdm.fileUploadService.validator.FileValidation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class FileManagerService(
-    var fileMapper: FileMapping
+    var fileMapper: FileMapping,
+    var fileValidation: FileValidation
 ){
 
     @Autowired
@@ -19,7 +21,14 @@ class FileManagerService(
         return repository.findAll()
     }
 
+    @Throws(Exception::class)
     fun saveFile(userFile: FileDTO) {
+        try{
+            fileValidation.maximumSize(userFile)
+        } catch (ex: Exception){
+            println("Error : $ex")
+            throw ex
+        }
         val convertedFile = fileMapper.convertUserFileToFile(userFile)
         repository.save(convertedFile)
     }

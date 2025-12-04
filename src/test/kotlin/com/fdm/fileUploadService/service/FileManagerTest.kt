@@ -6,8 +6,10 @@ import com.fdm.fileUploadService.Repository.FileRepository
 import com.fdm.fileUploadService.mapper.FileMapping
 import com.fdm.fileUploadService.modle.File
 import com.fdm.fileUploadService.modle.FileDTO
+import com.fdm.fileUploadService.validator.FileValidation
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.PropertySource
@@ -23,14 +25,15 @@ import kotlin.test.assertEquals
 @PropertySource("classpath:application-test.yml")
 class FileManagerTest {
 
-    @Autowired
     var fileMapper = FileMapping()
+
+    var fileValidation = FileValidation()
 
     @Autowired
     lateinit var repository: FileRepository
 
     @Autowired
-     var fileManagerService = FileManagerService(fileMapper)
+     var fileManagerService = FileManagerService(fileMapper, fileValidation)
 
     @Autowired
     lateinit var env: Environment
@@ -49,14 +52,14 @@ class FileManagerTest {
     }
 
     @Test
-    fun `get all files from test storage`(){
+    fun `When requesting getAllFiles then return all files found in the database`(){
         val result = fileManagerService.getAllFiles()
 
         assertEquals(3, result.count())
     }
 
     @Test
-    fun `save valid file to test storage`(){
+    fun `When requesting to save a valid file then a file should be added to the database`(){
         val data = ByteArray(1 * 8 * 8)
         val multipartFileOne: MultipartFile = MockMultipartFile(
             "file",
@@ -74,8 +77,31 @@ class FileManagerTest {
     }
 
     @Test
+    fun `When requesting to save a invalid file then through an exception`(){
+        val data = ByteArray(3 * 1024 * 1024)
+        val multipartFileOne: MultipartFile = MockMultipartFile(
+            "file",
+            "testFileFour.txt",
+            "text/plain",
+            data
+        )
+
+        val userFile = FileDTO(multipartFileOne.bytes)
+
+        assertThrows<Exception> {
+            fileManagerService.saveFile(userFile)
+        }
+
+        val result = fileManagerService.getAllFiles()
+
+        assertEquals(result.size, 3)
+    }
+
+    @Test
     fun `delete file with ID`(){
-        fileManagerService.deleteFile(1L)
+        val firstInstanceIdentifier = fileManagerService.getAllFiles()[0].id as Long
+
+        fileManagerService.deleteFile(firstInstanceIdentifier)
 
         val result = fileManagerService.getAllFiles()
         assertEquals(result.size, 2)

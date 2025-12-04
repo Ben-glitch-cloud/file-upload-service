@@ -3,6 +3,8 @@ package com.fdm.fileUploadService.controller
 import com.fdm.fileUploadService.modle.File
 import com.fdm.fileUploadService.modle.FileDTO
 import com.fdm.fileUploadService.service.FileManagerService
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -21,9 +23,14 @@ class FileManagerController(
     }
 
     @PostMapping("/file/save")
-    fun postNewFile(@RequestParam file: MultipartFile){
-        var fileToBytes = file.bytes
-        fileManagerService.saveFile(FileDTO(fileToBytes))
+    fun postNewFile(@RequestParam file: MultipartFile) : ResponseEntity<String> {
+        try {
+            fileManagerService.saveFile(FileDTO(file.bytes))
+        }catch (ex: Exception){
+            println("Error : $ex")
+            return ResponseEntity("", HttpStatus.BAD_REQUEST)
+        }
+        return ResponseEntity("", HttpStatus.OK)
     }
 
     @DeleteMapping("/file/delete")
