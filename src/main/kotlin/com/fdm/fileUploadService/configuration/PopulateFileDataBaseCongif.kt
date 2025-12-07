@@ -18,7 +18,7 @@ class PopulateFileDataBaseCongif{
     @Bean
     fun saveFiles(repository: FileRepository) : String {
 
-        val activeProfile = Arrays.toString(env.activeProfiles)
+        val activeProfile = env.activeProfiles.toMutableList()
 
         if(activeProfile.isEmpty()) {
             val data = ByteArray(1 * 8 * 8)

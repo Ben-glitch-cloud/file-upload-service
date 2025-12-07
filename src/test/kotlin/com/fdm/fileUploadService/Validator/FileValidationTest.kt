@@ -1,6 +1,5 @@
 package com.fdm.fileUploadService.Validator
 
-import com.fdm.fileUploadService.modle.FileUpload
 import com.fdm.fileUploadService.validator.FileValidation
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -22,10 +21,8 @@ class FileValidationTest {
             data
         )
 
-        val invalidFileSize = invalidMultipartFile.bytes
-
         assertThrows<Exception>{
-            fileValidation.storageAmount(FileUpload(invalidFileSize))
+            fileValidation.storageAmount(invalidMultipartFile)
         }
     }
 
@@ -39,15 +36,20 @@ class FileValidationTest {
             data
         )
 
-        val validFileSize = validMultipartFile.bytes
-
-        assertDoesNotThrow { fileValidation.storageAmount(FileUpload(validFileSize)) }
+        assertDoesNotThrow { fileValidation.storageAmount(validMultipartFile) }
     }
 
     @Test
     fun `When file is null then through an exception`(){
+        val invalidMultipartFile: MultipartFile = MockMultipartFile(
+            "file",
+            "testFileFour.txt",
+            "text/plain",
+            null
+        )
+
         assertThrows<Exception>{
-            fileValidation.storageAmount(FileUpload(null))
+            fileValidation.storageAmount(invalidMultipartFile)
         }
     }
 
@@ -61,11 +63,23 @@ class FileValidationTest {
             data
         )
 
-        val invalidFileSize = invalidMultipartFile.bytes
-
         assertThrows<Exception>{
-            fileValidation.storageAmount(FileUpload(invalidFileSize))
+            fileValidation.storageAmount(invalidMultipartFile)
         }
     }
 
+    @Test
+    fun `check one`(){
+        val data = ByteArray(1 * 16 * 16)
+        val invalidMultipartFile: MultipartFile = MockMultipartFile(
+            "file",
+            "testFileFour.png",
+            "text/plain",
+            data
+        )
+
+        assertThrows<Exception>{
+            fileValidation.fileType(invalidMultipartFile)
+        }
+    }
 }

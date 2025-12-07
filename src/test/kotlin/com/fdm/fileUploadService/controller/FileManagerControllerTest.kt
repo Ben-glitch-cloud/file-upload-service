@@ -2,7 +2,6 @@ package com.fdm.fileUploadService.controller
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fdm.fileUploadService.modle.File
-import com.fdm.fileUploadService.modle.FileUpload
 import com.fdm.fileUploadService.modle.ResponseException
 import com.fdm.fileUploadService.service.FileManagerService
 import io.mockk.mockk
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
@@ -59,6 +59,48 @@ class FileManagerControllerTest(
     }
 
     @Test
+    fun `GET Request - Successfully return a single file with an identity`(){
+        val data = ByteArray(1 * 8 * 8)
+        val multipartFileOne: MultipartFile = MockMultipartFile(
+            "file",
+            "testFileOne.txt",
+            "text/plain",
+            data
+        )
+        val fileOneDtoBytes = multipartFileOne.bytes
+
+        val expectedResult = File(null, fileOneDtoBytes)
+
+        `when`(fileManagerService.getFileById(1L)).thenReturn(expectedResult)
+
+        mvc.perform(get("/file/${1L}"))
+            .andExpect(status().isOk)
+            .andExpect(content()
+                .string(jacksonObjectMapper().writeValueAsString(expectedResult)))
+    }
+
+    @Test
+    fun `GET Request - Failed to return a non existing`(){
+        val testIdentifier200 = 200L
+        var response = ResponseException(
+            errorMessage = "No file found with Identifier $testIdentifier200",
+            HttpStatus.OK.name
+        )
+
+        `when`(fileManagerService.getFileById(testIdentifier200)).thenThrow(Exception(
+            "No file found with Identifier $testIdentifier200")
+        )
+
+        mvc.perform(get("/file/$testIdentifier200")
+        ).andExpect(status().isOk)
+            .andExpect(
+                content().string(jacksonObjectMapper().writeValueAsString(response)
+                )
+            )
+
+    }
+
+    @Test
     fun `POST Request - Successfully save valid file`(){
         val data = ByteArray(1 * 8 * 8)
         val vaildFile = MockMultipartFile(
@@ -88,7 +130,7 @@ class FileManagerControllerTest(
             HttpStatus.BAD_REQUEST.name
         )
 
-        `when`(fileManagerService.saveFile(FileUpload(invalidFileSize.bytes)))
+        `when`(fileManagerService.saveFile(invalidFileSize))
             .thenThrow(Exception(
                 "Invalid File - size limited reached must be small or equal than 2MB"
             ))

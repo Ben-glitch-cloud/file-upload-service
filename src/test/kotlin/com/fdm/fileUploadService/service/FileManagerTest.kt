@@ -5,7 +5,6 @@ package com.fdm.fileUploadService.service
 import com.fdm.fileUploadService.Repository.FileRepository
 import com.fdm.fileUploadService.mapper.FileMapping
 import com.fdm.fileUploadService.modle.File
-import com.fdm.fileUploadService.modle.FileUpload
 import com.fdm.fileUploadService.validator.FileValidation
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -68,9 +67,7 @@ class FileManagerTest {
             data
         )
 
-        val userFile = FileUpload(multipartFileOne.bytes)
-
-        fileManagerService.saveFile(userFile)
+        fileManagerService.saveFile(multipartFileOne)
 
         val result = fileManagerService.getAllFiles()
         assertEquals(result.size, 4)
@@ -86,15 +83,29 @@ class FileManagerTest {
             data
         )
 
-        val userFile = FileUpload(multipartFileOne.bytes)
-
         assertThrows<Exception> {
-            fileManagerService.saveFile(userFile)
+            fileManagerService.saveFile(multipartFileOne)
         }
 
         val result = fileManagerService.getAllFiles()
 
         assertEquals(result.size, 3)
+    }
+
+    @Test
+    fun `When requesting a existing file by Id then a single file should be returned`(){
+        val firstInstanceIdentifier = fileManagerService.getAllFiles()[0].id as Long
+
+        val result = fileManagerService.getFileById(firstInstanceIdentifier)
+
+        assertEquals(firstInstanceIdentifier, result.id)
+    }
+
+    @Test
+    fun `When requesting a non existing file by Id then a an exception should be thrown`(){
+        assertThrows<Exception> {
+            fileManagerService.getFileById(200L)
+        }
     }
 
     @Test
@@ -105,6 +116,11 @@ class FileManagerTest {
 
         val result = fileManagerService.getAllFiles()
         assertEquals(result.size, 2)
+    }
+
+    @Test
+    fun `delete all files`(){
+        repository.deleteAll()
     }
 
     @AfterEach
