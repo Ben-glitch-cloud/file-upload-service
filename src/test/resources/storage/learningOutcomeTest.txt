@@ -1,0 +1,1 @@
+Grab files from the folder named storage, and display them when request get all files.
