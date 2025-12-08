@@ -4,7 +4,7 @@ package com.fdm.fileUploadService.service
 
 import com.fdm.fileUploadService.Repository.FileRepository
 import com.fdm.fileUploadService.mapper.FileMapping
-import com.fdm.fileUploadService.modle.File
+import com.fdm.fileUploadService.model.File
 import com.fdm.fileUploadService.validator.FileValidation
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

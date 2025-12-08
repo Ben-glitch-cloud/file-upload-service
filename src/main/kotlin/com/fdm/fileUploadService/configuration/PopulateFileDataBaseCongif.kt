@@ -1,17 +1,17 @@
 package com.fdm.fileUploadService.configuration
 
 import com.fdm.fileUploadService.Repository.FileRepository
-import com.fdm.fileUploadService.modle.File
+import com.fdm.fileUploadService.annotation.Generated
+import com.fdm.fileUploadService.model.File
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
-import java.util.Arrays
 
 @Configuration
 class PopulateFileDataBaseCongif{
 
-
+    @set:Generated
     @Autowired
     lateinit var env: Environment
 

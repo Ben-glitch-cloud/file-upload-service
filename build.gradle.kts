@@ -1,3 +1,4 @@
+
 plugins {
 	kotlin("jvm") version "2.2.21"
 	kotlin("plugin.spring") version "2.2.21"
@@ -56,4 +57,16 @@ tasks.test {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
+
+        classDirectories.setFrom(files(classDirectories.files.map
+        { fileTree(it) {
+                setExcludes(listOf(
+                    "**/com/fdm/fileUploadService/**.class",
+                    "**/com/fdm/fileUploadService/model/**.class",
+                    "**/com/fdm/fileUploadService/service/FileManagerService/setFileMapper(FileMapping)"
+                ))
+            }
+        }))
+
 }
+

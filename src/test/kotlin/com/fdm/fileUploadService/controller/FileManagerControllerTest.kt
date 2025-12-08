@@ -1,8 +1,8 @@
 package com.fdm.fileUploadService.controller
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fdm.fileUploadService.modle.File
-import com.fdm.fileUploadService.modle.ResponseException
+import com.fdm.fileUploadService.model.File
+import com.fdm.fileUploadService.model.ResponseException
 import com.fdm.fileUploadService.service.FileManagerService
 import io.mockk.mockk
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
@@ -21,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.multipart.MultipartFile
 import kotlin.test.Test
+import kotlin.test.assertNotNull
 
 @WebMvcTest(FileManagerController::class)
 @ExtendWith(MockitoExtension::class)

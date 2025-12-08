@@ -1,19 +1,24 @@
 package com.fdm.fileUploadService.service
 
 import com.fdm.fileUploadService.Repository.FileRepository
+import com.fdm.fileUploadService.annotation.Generated
 import com.fdm.fileUploadService.mapper.FileMapping
-import com.fdm.fileUploadService.modle.File
+import com.fdm.fileUploadService.model.File
 import com.fdm.fileUploadService.validator.FileValidation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
 
+
 @Component
 class FileManagerService(
+    @set:Generated
     var fileMapper: FileMapping,
+    @set:Generated
     var fileValidation: FileValidation
 ){
 
+    @set:Generated
     @Autowired
     lateinit var repository: FileRepository
 

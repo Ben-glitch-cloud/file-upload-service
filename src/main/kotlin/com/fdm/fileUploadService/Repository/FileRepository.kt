@@ -1,6 +1,6 @@
 package com.fdm.fileUploadService.Repository
 
-import com.fdm.fileUploadService.modle.File
+import com.fdm.fileUploadService.model.File
 import org.springframework.data.repository.Repository
 
 interface FileRepository : Repository<File, Long> {
@@ -8,7 +8,6 @@ interface FileRepository : Repository<File, Long> {
 
     fun findAll() : Array<File>
 
-    // Work on this later
     fun findById(id: Long) : File
 
     fun deleteById(id: Long)

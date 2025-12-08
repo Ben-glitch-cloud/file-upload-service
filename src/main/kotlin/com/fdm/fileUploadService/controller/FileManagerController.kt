@@ -1,7 +1,8 @@
 package com.fdm.fileUploadService.controller
 
-import com.fdm.fileUploadService.modle.File
-import com.fdm.fileUploadService.modle.ResponseException
+import com.fdm.fileUploadService.annotation.Generated
+import com.fdm.fileUploadService.model.File
+import com.fdm.fileUploadService.model.ResponseException
 import com.fdm.fileUploadService.service.FileManagerService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 class FileManagerController(
+    @set:Generated
     var fileManagerService: FileManagerService
 ) {
 

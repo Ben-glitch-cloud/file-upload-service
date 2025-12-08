@@ -1,4 +1,4 @@
-package com.fdm.fileUploadService.modle
+package com.fdm.fileUploadService.model
 
 
 import jakarta.persistence.Entity

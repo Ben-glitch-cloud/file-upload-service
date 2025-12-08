@@ -1,4 +1,4 @@
-package com.fdm.fileUploadService.modle
+package com.fdm.fileUploadService.model
 
 data class ResponseException(
     var errorMessage: String = "",

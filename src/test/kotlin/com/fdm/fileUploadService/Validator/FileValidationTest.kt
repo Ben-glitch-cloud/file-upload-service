@@ -69,11 +69,56 @@ class FileValidationTest {
     }
 
     @Test
-    fun `check one`(){
+    fun `When file type is not type text then through an exception`(){
         val data = ByteArray(1 * 16 * 16)
         val invalidMultipartFile: MultipartFile = MockMultipartFile(
             "file",
             "testFileFour.png",
+            "text/plain",
+            data
+        )
+
+        assertThrows<Exception>{
+            fileValidation.fileType(invalidMultipartFile)
+        }
+    }
+
+    @Test
+    fun `When original file name is missing or null then through an exception`(){
+        val data = ByteArray(1 * 16 * 16)
+        val invalidMultipartFile: MultipartFile = MockMultipartFile(
+            "file",
+            null,
+            "text/plain",
+            data
+        )
+
+        assertThrows<Exception>{
+            fileValidation.fileType(invalidMultipartFile)
+        }
+    }
+
+    @Test
+    fun `When file type text is missing from name then through an exception`(){
+        val data = ByteArray(1 * 16 * 16)
+        val invalidMultipartFile: MultipartFile = MockMultipartFile(
+            "file",
+            "testFileFive",
+            "text/plain",
+            data
+        )
+
+        assertThrows<Exception>{
+            fileValidation.fileType(invalidMultipartFile)
+        }
+    }
+
+    @Test
+    fun `When file name is an empty then through an exception`(){
+        val data = ByteArray(1 * 16 * 16)
+        val invalidMultipartFile: MultipartFile = MockMultipartFile(
+            "file",
+            "",
             "text/plain",
             data
         )

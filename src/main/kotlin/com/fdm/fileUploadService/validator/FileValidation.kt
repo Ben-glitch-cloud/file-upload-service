@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile
 class FileValidation {
 
     fun storageAmount(fileUpload : MultipartFile){
-        var file = fileUpload.bytes
+        val file = fileUpload.bytes
         val fileKiloBytesLength = (file.size.div(1024))
         val fileMegaBytesLength = (fileKiloBytesLength.div(1024))
         if(fileMegaBytesLength > 2){
@@ -21,7 +21,7 @@ class FileValidation {
 
     fun fileType(fileUpload: MultipartFile){
         val fileName = fileUpload.originalFilename
-        val fileType = fileName?.split(".")?.last()
+        val fileType = fileName!!.split(".").last()
         if(fileType != "txt"){ throw Exception("Invalid File - must be plan text") }
         return
     }
