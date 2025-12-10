@@ -1,4 +1,4 @@
-package com.fdm.fileUploadService.Repository
+package com.fdm.fileUploadService.repository
 
 import com.fdm.fileUploadService.model.File
 import org.springframework.data.repository.Repository

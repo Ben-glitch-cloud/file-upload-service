@@ -1,6 +1,6 @@
 package com.fdm.fileUploadService.configuration
 
-import com.fdm.fileUploadService.Repository.FileRepository
+import com.fdm.fileUploadService.repository.FileRepository
 import com.fdm.fileUploadService.annotation.Generated
 import com.fdm.fileUploadService.model.File
 import org.springframework.beans.factory.annotation.Autowired

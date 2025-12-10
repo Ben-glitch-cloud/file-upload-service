@@ -4,6 +4,7 @@ import com.fdm.fileUploadService.annotation.Generated
 import com.fdm.fileUploadService.model.File
 import com.fdm.fileUploadService.model.ResponseException
 import com.fdm.fileUploadService.service.FileManagerService
+import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-class FileManagerController(
+class FileManagerServerSideController(
     @set:Generated
     var fileManagerService: FileManagerService
 ) {

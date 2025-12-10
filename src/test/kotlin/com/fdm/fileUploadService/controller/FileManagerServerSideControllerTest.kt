@@ -20,11 +20,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.multipart.MultipartFile
 import kotlin.test.Test
-import kotlin.test.assertNotNull
 
-@WebMvcTest(FileManagerController::class)
+@WebMvcTest(FileManagerServerSideController::class)
 @ExtendWith(MockitoExtension::class)
-class FileManagerControllerTest(
+class FileManagerServerSideControllerTest(
     @Value("\${storage.filePath}") var filePath: String
 ) {
     @Autowired
