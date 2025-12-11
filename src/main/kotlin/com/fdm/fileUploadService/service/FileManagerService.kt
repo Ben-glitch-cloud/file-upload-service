@@ -27,14 +27,15 @@ class FileManagerService(
     }
 
     @Throws(Exception::class)
-    fun saveFile(file: MultipartFile) {
+    fun saveFile(file: MultipartFile, fileDescription: String) {
         try{
             fileValidation.fileType(file)
             fileValidation.storageAmount(file)
+            fileValidation.fileDescriptionMaxSize(fileDescription)
         } catch (ex: Exception){
             throw ex
         }
-        val convertedFile = fileMapper.convertUserFileToFile(file)
+        val convertedFile = fileMapper.convertUserFileToFile(file, fileDescription)
         repository.save(convertedFile)
     }
 

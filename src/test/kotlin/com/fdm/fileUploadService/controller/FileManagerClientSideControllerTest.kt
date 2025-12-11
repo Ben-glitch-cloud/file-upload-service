@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.model
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.view
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @WebMvcTest(FileManagerClientSideController::class)
 @ExtendWith(MockitoExtension::class)
@@ -27,10 +29,13 @@ class FileManagerClientSideControllerTest {
 
     @Test
     fun `View - When directing to the file page then display all files stored`(){
+        val sdf = SimpleDateFormat("dd/MM/yyyy")
+        val currentTestDate = sdf.format(Date())
+
         val validFileArray = arrayOf(
-            File(1L, null),
-            File(2L, null),
-            File(3L, null)
+            File(id = 1L, fileName = "", description = "", data = null, date = currentTestDate),
+            File(id = 2L, fileName = "", description = "", data = null, date = currentTestDate),
+            File(id = 3L, fileName = "", description = "", data = null, date = currentTestDate)
         )
 
         `when`(FileStorage.getAllFiles()).thenReturn(validFileArray)

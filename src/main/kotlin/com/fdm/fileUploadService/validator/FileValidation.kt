@@ -26,4 +26,11 @@ class FileValidation {
         return
     }
 
+    fun fileDescriptionMaxSize(fileDescription: String){
+        val fileDescriptionSize = fileDescription.toCharArray().size
+        if(fileDescriptionSize > 200){
+            throw Exception("Invalid File Description - must be under 200 characters")
+        }
+    }
+
 }

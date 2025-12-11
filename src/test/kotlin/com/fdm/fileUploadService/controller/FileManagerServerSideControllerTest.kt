@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.multipart.MultipartFile
+import java.text.SimpleDateFormat
+import java.util.Date
 import kotlin.test.Test
 
 @WebMvcTest(FileManagerServerSideController::class)
@@ -34,6 +36,9 @@ class FileManagerServerSideControllerTest(
     @MockitoBean
     private lateinit var fileManagerService: FileManagerService
 
+    val sdf = SimpleDateFormat("dd/MM/yyyy")
+    val currentTestDate = sdf.format(Date())
+
     @Test
     fun `GET Request - Successfully return all files when called`(){
         val data = ByteArray(1 * 1024 * 1024)
@@ -46,7 +51,7 @@ class FileManagerServerSideControllerTest(
         val fileOneDtoBytes = multipartFileOne.bytes
 
         val expectedResult = arrayOf<File>(
-            File(null, fileOneDtoBytes)
+            File(id = null, fileName = "", description = "", data = fileOneDtoBytes, date = currentTestDate)
         )
 
         `when`(fileManagerService.getAllFiles()).thenReturn(expectedResult)
@@ -68,7 +73,7 @@ class FileManagerServerSideControllerTest(
         )
         val fileOneDtoBytes = multipartFileOne.bytes
 
-        val expectedResult = File(null, fileOneDtoBytes)
+        val expectedResult = File(id = null, fileName = "", description = "", data = fileOneDtoBytes, date = currentTestDate)
 
         `when`(fileManagerService.getFileById(1L)).thenReturn(expectedResult)
 
@@ -108,9 +113,11 @@ class FileManagerServerSideControllerTest(
             "text/plain",
             data
         )
+        val fileDescription = "Test file description"
 
         mvc.perform(multipart("/file/save")
             .file(vaildFile)
+            .param("fileDescription", fileDescription)
         ).andExpect(status().isOk)
     }
 
@@ -123,19 +130,52 @@ class FileManagerServerSideControllerTest(
             "text/plain",
             data
         )
+        val fileDescription = "Test file description"
 
         var response = ResponseException(
             errorMessage = "Invalid File - size limited reached must be small or equal than 2MB",
             HttpStatus.BAD_REQUEST.name
         )
 
-        `when`(fileManagerService.saveFile(invalidFileSize))
+        `when`(fileManagerService.saveFile(invalidFileSize, fileDescription))
             .thenThrow(Exception(
                 "Invalid File - size limited reached must be small or equal than 2MB"
             ))
 
         mvc.perform(multipart("/file/save")
             .file(invalidFileSize)
+            .param("fileDescription", fileDescription)
+        ).andExpect(status().isBadRequest)
+            .andExpect(
+                content().string(jacksonObjectMapper().writeValueAsString(response)
+                )
+            )
+    }
+
+    @Test
+    fun `POST Request - Failed as file description was to large`(){
+        val data = ByteArray(1 * 16 * 16)
+        val validFileSize = MockMultipartFile(
+            "file",
+            "testFileOne.txt",
+            "text/plain",
+            data
+        )
+        val invalidFileDescription = "Test file description"
+
+        val response = ResponseException(
+            errorMessage = "Invalid File Description - must be under 200 characters",
+            HttpStatus.BAD_REQUEST.name
+        )
+
+        `when`(fileManagerService.saveFile(validFileSize, invalidFileDescription))
+            .thenThrow(Exception(
+                "Invalid File Description - must be under 200 characters"
+            ))
+
+        mvc.perform(multipart("/file/save")
+            .file(validFileSize)
+            .param("fileDescription", invalidFileDescription)
         ).andExpect(status().isBadRequest)
             .andExpect(
                 content().string(jacksonObjectMapper().writeValueAsString(response)

@@ -127,4 +127,24 @@ class FileValidationTest {
             fileValidation.fileType(invalidMultipartFile)
         }
     }
+
+    @Test
+    fun `When file description is larger than 200 characters then through a exception`(){
+        val invalidFileDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nisl sem, faucibus " +
+                "sit amet risus quis, egestas varius ex. Aliquam et tempus eros, sagittis sagittis velit. " +
+                "Integer interdum metus integer."
+
+        assertThrows<Exception>{
+            fileValidation.fileDescriptionMaxSize(invalidFileDescription)
+        }
+    }
+
+    @Test
+    fun `When file description is under or equal 200 characters then dont through exception`(){
+        val validFileDescription = "Lorem ipsum dolor sit amet"
+
+        assertDoesNotThrow{
+            fileValidation.fileDescriptionMaxSize(validFileDescription)
+        }
+    }
 }

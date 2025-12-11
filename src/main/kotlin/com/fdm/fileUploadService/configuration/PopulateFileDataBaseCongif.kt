@@ -23,15 +23,32 @@ class PopulateFileDataBaseCongif{
         if(activeProfile.isEmpty()) {
             val data = ByteArray(1 * 8 * 8)
 
-            var fileOne = File(null, data)
-            var fileTwo = File(null, data)
-            var fileThree = File(null, data)
+            val fileOne = File(
+                id = null,
+                fileName = "Budget.txt",
+                description = "Finance statements for 2025",
+                data = data, date = "08/09/2025"
+            )
+            val fileTwo = File(
+                id = null,
+                fileName = "Contacts.txt",
+                description = "Company contact list for the human resource department",
+                data = data,
+                date = "22/07/2025"
+            )
+            val fileThree = File(
+                id = null,
+                fileName = "Policies.txt",
+                description = "Updated company goals and objects for 2025",
+                data = data,
+                date = "03/09/2025"
+            )
 
             repository.save(fileOne)
             repository.save(fileTwo)
             repository.save(fileThree)
 
-            var numberOfFilesSaved = repository.findAll().size
+            val numberOfFilesSaved = repository.findAll().size
 
             println("Environment : not found \n" +
                     "- Default environment : dev \n" +

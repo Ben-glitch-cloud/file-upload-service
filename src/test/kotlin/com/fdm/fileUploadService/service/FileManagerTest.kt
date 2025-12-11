@@ -16,6 +16,8 @@ import org.springframework.core.env.Environment
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.web.multipart.MultipartFile
+import java.text.SimpleDateFormat
+import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -37,13 +39,16 @@ class FileManagerTest {
     @Autowired
     lateinit var env: Environment
 
+    val sdf = SimpleDateFormat("dd/MM/yyyy")
+    val currentTestDate = sdf.format(Date())
+
     @BeforeEach
     fun setUp(){
-        val data = ByteArray(1 * 8 * 8)
+        val fileBytes = ByteArray(1 * 8 * 8)
 
-        var fileOne = File(null, data)
-        var fileTwo = File(null, data)
-        var fileThree = File(null, data)
+        var fileOne = File(id = null, fileName = "", description = "", data = fileBytes, date = currentTestDate)
+        var fileTwo = File(id = null, fileName = "", description = "", data = fileBytes, date = currentTestDate)
+        var fileThree = File(id = null, fileName = "", description = "", data = fileBytes, date = currentTestDate)
 
         repository.save(fileOne)
         repository.save(fileTwo)
@@ -66,8 +71,9 @@ class FileManagerTest {
             "text/plain",
             data
         )
+        val fileDescription = "Test file description"
 
-        fileManagerService.saveFile(multipartFileOne)
+        fileManagerService.saveFile(multipartFileOne, fileDescription)
 
         val result = fileManagerService.getAllFiles()
         assertEquals(result.size, 4)
@@ -82,9 +88,10 @@ class FileManagerTest {
             "text/plain",
             data
         )
+        val fileDescription = "Test file description"
 
         assertThrows<Exception> {
-            fileManagerService.saveFile(multipartFileOne)
+            fileManagerService.saveFile(multipartFileOne, fileDescription)
         }
 
         val result = fileManagerService.getAllFiles()
