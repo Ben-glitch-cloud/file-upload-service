@@ -25,8 +25,10 @@ class FileMappingTest {
         val result = fileMapping.convertUserFileToFile(multipartFileOne, fileDescription)
 
         assertNull(result.id)
+        assertNotNull(result.fileName)
         assertNotNull(result.description)
         assertNotNull(result.data)
+        assertNotNull(result.date)
     }
 
 }

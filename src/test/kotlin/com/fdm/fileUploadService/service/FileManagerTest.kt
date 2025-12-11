@@ -16,6 +16,8 @@ import org.springframework.core.env.Environment
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.web.multipart.MultipartFile
+import java.text.SimpleDateFormat
+import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -37,13 +39,16 @@ class FileManagerTest {
     @Autowired
     lateinit var env: Environment
 
+    val sdf = SimpleDateFormat("dd/MM/yyyy")
+    val currentTestDate = sdf.format(Date())
+
     @BeforeEach
     fun setUp(){
         val fileBytes = ByteArray(1 * 8 * 8)
 
-        var fileOne = File(id = null, description = "", data = fileBytes)
-        var fileTwo = File(id = null, description = "", data = fileBytes)
-        var fileThree = File(id = null, description = "", data = fileBytes)
+        var fileOne = File(id = null, fileName = "", description = "", data = fileBytes, date = currentTestDate)
+        var fileTwo = File(id = null, fileName = "", description = "", data = fileBytes, date = currentTestDate)
+        var fileThree = File(id = null, fileName = "", description = "", data = fileBytes, date = currentTestDate)
 
         repository.save(fileOne)
         repository.save(fileTwo)

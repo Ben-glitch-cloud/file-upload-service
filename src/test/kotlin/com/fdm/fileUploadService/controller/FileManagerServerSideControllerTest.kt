@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.multipart.MultipartFile
+import java.text.SimpleDateFormat
+import java.util.Date
 import kotlin.test.Test
 
 @WebMvcTest(FileManagerServerSideController::class)
@@ -34,6 +36,9 @@ class FileManagerServerSideControllerTest(
     @MockitoBean
     private lateinit var fileManagerService: FileManagerService
 
+    val sdf = SimpleDateFormat("dd/MM/yyyy")
+    val currentTestDate = sdf.format(Date())
+
     @Test
     fun `GET Request - Successfully return all files when called`(){
         val data = ByteArray(1 * 1024 * 1024)
@@ -46,7 +51,7 @@ class FileManagerServerSideControllerTest(
         val fileOneDtoBytes = multipartFileOne.bytes
 
         val expectedResult = arrayOf<File>(
-            File(id = null, description = "", data = fileOneDtoBytes)
+            File(id = null, fileName = "", description = "", data = fileOneDtoBytes, date = currentTestDate)
         )
 
         `when`(fileManagerService.getAllFiles()).thenReturn(expectedResult)
@@ -68,7 +73,7 @@ class FileManagerServerSideControllerTest(
         )
         val fileOneDtoBytes = multipartFileOne.bytes
 
-        val expectedResult = File(id = null, description = "", data = fileOneDtoBytes)
+        val expectedResult = File(id = null, fileName = "", description = "", data = fileOneDtoBytes, date = currentTestDate)
 
         `when`(fileManagerService.getFileById(1L)).thenReturn(expectedResult)
 
