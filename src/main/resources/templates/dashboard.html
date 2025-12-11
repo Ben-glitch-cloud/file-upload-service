@@ -1,0 +1,13 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Get Stored Files</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<h1>Stored Files</h1>
+<tbody>
+    <th:block th:each="singleFile : ${fileList}">
+        <td th:text="${singleFile.id}"></td>
+        <td th:text="${singleFile.data}"></td>
+    </th:block>
+</tbody>
+</html>

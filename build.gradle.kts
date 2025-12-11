@@ -30,6 +30,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.h2database:h2:2.4.240")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:5.0.0")
+    implementation("org.springframework.cloud:spring-cloud-starter-loadbalancer:5.0.0")
     testImplementation("io.mockk:mockk:1.14.6")
     testImplementation("org.mockito:mockito-core:5.20.0")
     testImplementation("com.h2database:h2:2.4.240")

@@ -2,7 +2,7 @@ package com.fdm.fileUploadService.service
 
 
 
-import com.fdm.fileUploadService.Repository.FileRepository
+import com.fdm.fileUploadService.repository.FileRepository
 import com.fdm.fileUploadService.mapper.FileMapping
 import com.fdm.fileUploadService.model.File
 import com.fdm.fileUploadService.validator.FileValidation
