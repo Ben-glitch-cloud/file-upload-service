@@ -15,7 +15,7 @@ class FileMapping {
 
         return File(
             id = null,
-            fileName = file.name,
+            fileName = file.originalFilename,
             description = fileDescription,
             data = file.bytes,
             date = currentDate

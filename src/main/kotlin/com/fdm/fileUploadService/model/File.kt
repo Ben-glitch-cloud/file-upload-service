@@ -14,7 +14,7 @@ open class File(
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Long? = null,
 
-    var fileName: String = "",
+    var fileName: String? = null,
 
     var description: String = "",
 

@@ -25,20 +25,20 @@ class PopulateFileDataBaseCongif{
 
             val fileOne = File(
                 id = null,
-                fileName = "Budget",
+                fileName = "Budget.txt",
                 description = "Finance statements for 2025",
                 data = data, date = "08/09/2025"
             )
             val fileTwo = File(
                 id = null,
-                fileName = "Contacts",
+                fileName = "Contacts.txt",
                 description = "Company contact list for the human resource department",
                 data = data,
                 date = "22/07/2025"
             )
             val fileThree = File(
                 id = null,
-                fileName = "Policies",
+                fileName = "Policies.txt",
                 description = "Updated company goals and objects for 2025",
                 data = data,
                 date = "03/09/2025"
