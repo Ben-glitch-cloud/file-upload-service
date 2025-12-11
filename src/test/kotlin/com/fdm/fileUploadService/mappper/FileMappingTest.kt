@@ -4,6 +4,7 @@ import com.fdm.fileUploadService.mapper.FileMapping
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
 import kotlin.test.Test
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 class FileMappingTest {
@@ -19,10 +20,13 @@ class FileMappingTest {
             "text/plain",
             data
         )
+        val fileDescription = "Test file description"
 
-        val result = fileMapping.convertUserFileToFile(multipartFileOne)
+        val result = fileMapping.convertUserFileToFile(multipartFileOne, fileDescription)
 
         assertNull(result.id)
+        assertNotNull(result.description)
+        assertNotNull(result.data)
     }
 
 }

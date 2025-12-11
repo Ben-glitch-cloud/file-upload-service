@@ -23,9 +23,9 @@ class PopulateFileDataBaseCongif{
         if(activeProfile.isEmpty()) {
             val data = ByteArray(1 * 8 * 8)
 
-            var fileOne = File(null, data)
-            var fileTwo = File(null, data)
-            var fileThree = File(null, data)
+            var fileOne = File(id = null, description = "", data = data)
+            var fileTwo = File(id = null, description = "", data = data)
+            var fileThree = File(id = null, description = "", data = data)
 
             repository.save(fileOne)
             repository.save(fileTwo)

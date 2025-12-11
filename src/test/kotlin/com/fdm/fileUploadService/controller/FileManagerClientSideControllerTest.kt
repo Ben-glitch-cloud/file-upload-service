@@ -28,9 +28,9 @@ class FileManagerClientSideControllerTest {
     @Test
     fun `View - When directing to the file page then display all files stored`(){
         val validFileArray = arrayOf(
-            File(1L, null),
-            File(2L, null),
-            File(3L, null)
+            File(id = 1L, description = "", data = null),
+            File(id = 2L, description = "", data = null),
+            File(id = 3L, description = "", data = null)
         )
 
         `when`(FileStorage.getAllFiles()).thenReturn(validFileArray)

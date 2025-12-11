@@ -46,7 +46,7 @@ class FileManagerServerSideControllerTest(
         val fileOneDtoBytes = multipartFileOne.bytes
 
         val expectedResult = arrayOf<File>(
-            File(null, fileOneDtoBytes)
+            File(id = null, description = "", data = fileOneDtoBytes)
         )
 
         `when`(fileManagerService.getAllFiles()).thenReturn(expectedResult)
@@ -68,7 +68,7 @@ class FileManagerServerSideControllerTest(
         )
         val fileOneDtoBytes = multipartFileOne.bytes
 
-        val expectedResult = File(null, fileOneDtoBytes)
+        val expectedResult = File(id = null, description = "", data = fileOneDtoBytes)
 
         `when`(fileManagerService.getFileById(1L)).thenReturn(expectedResult)
 
@@ -108,9 +108,11 @@ class FileManagerServerSideControllerTest(
             "text/plain",
             data
         )
+        val fileDescription = "Test file description"
 
         mvc.perform(multipart("/file/save")
             .file(vaildFile)
+            .param("fileDescription", fileDescription)
         ).andExpect(status().isOk)
     }
 
@@ -123,19 +125,52 @@ class FileManagerServerSideControllerTest(
             "text/plain",
             data
         )
+        val fileDescription = "Test file description"
 
         var response = ResponseException(
             errorMessage = "Invalid File - size limited reached must be small or equal than 2MB",
             HttpStatus.BAD_REQUEST.name
         )
 
-        `when`(fileManagerService.saveFile(invalidFileSize))
+        `when`(fileManagerService.saveFile(invalidFileSize, fileDescription))
             .thenThrow(Exception(
                 "Invalid File - size limited reached must be small or equal than 2MB"
             ))
 
         mvc.perform(multipart("/file/save")
             .file(invalidFileSize)
+            .param("fileDescription", fileDescription)
+        ).andExpect(status().isBadRequest)
+            .andExpect(
+                content().string(jacksonObjectMapper().writeValueAsString(response)
+                )
+            )
+    }
+
+    @Test
+    fun `POST Request - Failed as file description was to large`(){
+        val data = ByteArray(1 * 16 * 16)
+        val validFileSize = MockMultipartFile(
+            "file",
+            "testFileOne.txt",
+            "text/plain",
+            data
+        )
+        val invalidFileDescription = "Test file description"
+
+        val response = ResponseException(
+            errorMessage = "Invalid File Description - must be under 200 characters",
+            HttpStatus.BAD_REQUEST.name
+        )
+
+        `when`(fileManagerService.saveFile(validFileSize, invalidFileDescription))
+            .thenThrow(Exception(
+                "Invalid File Description - must be under 200 characters"
+            ))
+
+        mvc.perform(multipart("/file/save")
+            .file(validFileSize)
+            .param("fileDescription", invalidFileDescription)
         ).andExpect(status().isBadRequest)
             .andExpect(
                 content().string(jacksonObjectMapper().writeValueAsString(response)

@@ -7,9 +7,10 @@ import org.springframework.web.multipart.MultipartFile
 @Component
 class FileMapping {
 
-    fun convertUserFileToFile(file: MultipartFile) : File {
+    fun convertUserFileToFile(file: MultipartFile, fileDescription: String) : File {
         return File(
             id = null,
+            description = fileDescription,
             data = file.bytes
         )
     }

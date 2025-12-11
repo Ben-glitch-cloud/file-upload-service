@@ -39,11 +39,11 @@ class FileManagerTest {
 
     @BeforeEach
     fun setUp(){
-        val data = ByteArray(1 * 8 * 8)
+        val fileBytes = ByteArray(1 * 8 * 8)
 
-        var fileOne = File(null, data)
-        var fileTwo = File(null, data)
-        var fileThree = File(null, data)
+        var fileOne = File(id = null, description = "", data = fileBytes)
+        var fileTwo = File(id = null, description = "", data = fileBytes)
+        var fileThree = File(id = null, description = "", data = fileBytes)
 
         repository.save(fileOne)
         repository.save(fileTwo)
@@ -66,8 +66,9 @@ class FileManagerTest {
             "text/plain",
             data
         )
+        val fileDescription = "Test file description"
 
-        fileManagerService.saveFile(multipartFileOne)
+        fileManagerService.saveFile(multipartFileOne, fileDescription)
 
         val result = fileManagerService.getAllFiles()
         assertEquals(result.size, 4)
@@ -82,9 +83,10 @@ class FileManagerTest {
             "text/plain",
             data
         )
+        val fileDescription = "Test file description"
 
         assertThrows<Exception> {
-            fileManagerService.saveFile(multipartFileOne)
+            fileManagerService.saveFile(multipartFileOne, fileDescription)
         }
 
         val result = fileManagerService.getAllFiles()

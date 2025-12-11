@@ -13,6 +13,8 @@ open class File(
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Long? = null,
 
+    var description: String = "",
+
     @Lob
     var data: ByteArray? = null
 )

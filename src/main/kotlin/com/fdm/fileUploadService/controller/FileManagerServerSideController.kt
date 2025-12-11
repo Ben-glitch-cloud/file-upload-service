@@ -4,6 +4,7 @@ import com.fdm.fileUploadService.annotation.Generated
 import com.fdm.fileUploadService.model.File
 import com.fdm.fileUploadService.model.ResponseException
 import com.fdm.fileUploadService.service.FileManagerService
+import org.springframework.context.annotation.Description
 import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -37,9 +38,12 @@ class FileManagerServerSideController(
     }
 
     @PostMapping("/file/save")
-    fun postNewFile(@RequestParam file: MultipartFile) : ResponseEntity<ResponseException> {
+    fun postNewFile(
+        @RequestParam file: MultipartFile,
+        @RequestParam fileDescription: String
+    ) : ResponseEntity<ResponseException> {
         try {
-            fileManagerService.saveFile(file)
+            fileManagerService.saveFile(file, fileDescription)
         }catch (ex: Exception){
             return ResponseEntity(ResponseException("${ex.message}", HttpStatus.BAD_REQUEST.name),
                 HttpStatus.BAD_REQUEST)
