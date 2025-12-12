@@ -5,10 +5,10 @@
 </head>
 <h1>Stored Files</h1>
 <tbody>
-    <th:block th:each="singleFile : ${storedFilesResponsePayload}">
-        <td th:text="${singleFile.id}"></td>
-        <td th:text="${singleFile.fileName}"></td>
-        <td th:text="${singleFile.date}"></td>
-    </th:block>
+    <ul th:each="singleFile : ${storedFilesResponsePayload}">
+        <li th:text="${singleFile.id}"></li>
+        <li th:text="${singleFile.fileName}"></li>
+        <li th:text="${singleFile.date}"></li>
+    </ul>
 </tbody>
 </html>

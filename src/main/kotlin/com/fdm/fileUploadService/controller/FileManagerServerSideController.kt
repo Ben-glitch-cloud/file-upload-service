@@ -4,8 +4,6 @@ import com.fdm.fileUploadService.annotation.Generated
 import com.fdm.fileUploadService.model.File
 import com.fdm.fileUploadService.model.ResponseException
 import com.fdm.fileUploadService.service.FileManagerService
-import org.springframework.context.annotation.Description
-import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -30,7 +28,7 @@ class FileManagerServerSideController(
     @GetMapping("/file/{identifier}")
     fun getFileByIdentifier(@PathVariable(value="identifier") identifier : Long) : ResponseEntity<*> {
         return try{
-             ResponseEntity( fileManagerService.getFileById(identifier), HttpStatus.OK)
+             ResponseEntity(fileManagerService.getFileById(identifier), HttpStatus.OK)
         }catch(ex: Exception){
              ResponseEntity(ResponseException("${ex.message}", HttpStatus.OK.name), HttpStatus.OK)
         }
